@@ -13,34 +13,47 @@
 
 void main(void) 
 {
-    int cont = 0;
-    
-    
+    char estado = 0;
+    char contador = 0;
     disp7seg_init();
-    
-    while( 1 )
+    while(1)
     {
-        disp7seg( cont );
-        if( botao_Up() == 1)
+        switch(estado)
         {
-            cont++;
-            if (cont > 15)
-                cont = 0;
-            while ( botao_Up() == 1)
-            {
-              disp7seg( cont );  
-            }
-        }
-        if( botao_Down() == 1)
-        {
-            cont--;
-            if (cont < 0)
-                cont = 15;
-            while ( botao_Down() == 1)
-            {
-              disp7seg( cont );  
-            }
+            case 0:
+                    estado = 1;
+                    break;
+            case 1:
+                    if( botao_Up() )
+                    estado = 90;
+                    if( botao_Down() )
+                    estado = 100;
+                    break;
+            case 90:
+//                  ++contador;
+//                  if(contador > 15)
+//                  contador = 0;
+                    contador = ++contador % 16;
+                    disp7seg ( contador );
+                    estado = 255;
+                    break;
+            case 255:
+                    if( !botao_Up() )
+                    estado = 1;
+                    break;
+            case 100:
+//                  if(contador <= 0)
+//                  contador = 15;
+//                  else
+//                  --contador;
+                    contador = --contador % 16;
+                    disp7seg(contador);
+                    estado = 150;
+                    break;
+            case 150:
+                    if( !botao_Down() )
+                    estado = 1;
+                    break;
         }
     }
-    return;
 }
